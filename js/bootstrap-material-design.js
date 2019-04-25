@@ -6252,8 +6252,13 @@ var Autofill = function ($$$1) {
       setInterval(function () {
         $$$1("input[type!=checkbox]").each(function (index, element) {
           var $element = $$$1(element);
+          var initialValue = $element.attr("value");
 
-          if ($element.val() && $element.val() !== $element.attr("value")) {
+          if (initialValue === undefined) {
+            initialValue = "";
+          }
+
+          if ($element.val() && $element.val() !== initialValue) {
             $element.trigger("change");
           }
         });
@@ -6265,12 +6270,17 @@ var Autofill = function ($$$1) {
       //  (because user can select from the autofill dropdown only when the input has focus)
       var focused = null;
       $$$1(document).on("focus", "input", function (event) {
-        var $inputs = $$$1(event.currentTarget).closest("form").find("input").not("[type=file]");
+        var $inputs = $$$1(event.currentTarget).closest("form").find("input").not("[type=file], [type=date]");
         focused = setInterval(function () {
           $inputs.each(function (index, element) {
             var $element = $$$1(element);
+            var initialValue = $element.attr("value");
 
-            if ($element.val() !== $element.attr("value")) {
+            if (initialValue === undefined) {
+              initialValue = "";
+            }
+
+            if ($element.val() !== initialValue) {
               $element.trigger("change");
             }
           });
